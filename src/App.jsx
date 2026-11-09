@@ -52,6 +52,8 @@ const MainContent = () => {
       <AuthModal />
       <Toast />
     </div>
+
+    
   );
 };
 
