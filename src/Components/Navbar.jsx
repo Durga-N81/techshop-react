@@ -76,7 +76,7 @@ const Navbar = () => {
           className="cursor-pointer group flex items-center gap-1"
         >
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white group-hover:text-red-500 transition-colors">
-            Tech<span className="text-red-600">-Shop</span>
+            Tech-Shop
           </h1>
         </div>
 
