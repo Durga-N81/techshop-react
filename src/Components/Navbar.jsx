@@ -65,7 +65,9 @@ const Navbar = () => {
 
     return products.filter((item) =>
       [item.title, item.brand, item.category, item.info]
-        .some(value => String(value ?? '').toLowerCase().includes(query))
+        .some(value =>
+          String(value ?? '').toLowerCase().includes(query)
+        )
     );
   }, [products, searchQuery]);
 
@@ -76,13 +78,15 @@ const Navbar = () => {
     setSearchQuery('');
   };
 
-  // User login / dropdown
+  // User dropdown
   const handleUserClick = () => {
-    if (user) {
-      setUserDropdown(prev => !prev);
-    } else {
-      openAuth('login');
-    }
+    setUserDropdown(prev => !prev);
+  };
+
+  // Open Login / Signup modal
+  const handleAuthClick = () => {
+    setUserDropdown(false);
+    openAuth('login');
   };
 
   // Logout
@@ -114,6 +118,7 @@ const Navbar = () => {
 
           {/* Search */}
           <div className="relative" ref={searchContainerRef}>
+
             <button
               onClick={() => setIsSearchOpen(prev => !prev)}
               className="text-gray-300 hover:text-white p-2 rounded-full hover:bg-white/5"
@@ -125,10 +130,10 @@ const Navbar = () => {
 
             {/* Search Box */}
             {isSearchOpen && (
-              // <div className="absolute right-0 top-12 w-[320px] sm:w-[420px] bg-[#14161f] border border-white/10 rounded-xl shadow-2xl p-3 z-50">
               <div className="fixed top-24 left-1/2 -translate-x-1/2 w-[90vw] sm:w-[85vw] lg:w-[80vw] bg-[#14161f] border border-white/10 rounded-xl shadow-2xl p-4 z-50">
 
                 <div className="relative flex items-center">
+
                   <AiOutlineSearch className="w-5 h-5 text-gray-400 absolute left-3" />
 
                   <input
@@ -149,6 +154,7 @@ const Navbar = () => {
                       <AiOutlineClose className="w-4 h-4" />
                     </button>
                   )}
+
                 </div>
 
                 {/* Search Results */}
@@ -162,6 +168,7 @@ const Navbar = () => {
                           onClick={() => handleSelectProduct(prod)}
                           className="w-full flex items-center gap-3 p-2.5 rounded-lg hover:bg-white/5 text-left"
                         >
+
                           <img
                             src={prod.images?.[0] || prod.heroImage || FALLBACK_IMAGE}
                             alt={prod.title || 'Product'}
@@ -170,6 +177,7 @@ const Navbar = () => {
                           />
 
                           <div className="flex-1 min-w-0">
+
                             <h4 className="text-sm font-semibold text-white truncate">
                               {prod.title}
                             </h4>
@@ -181,11 +189,13 @@ const Navbar = () => {
                             <span className="text-xs text-red-500 font-bold">
                               ₹{Number(prod.finalPrice || 0).toLocaleString('en-IN')}
                             </span>
+
                           </div>
 
                           <span className="text-[10px] uppercase text-gray-400 bg-white/5 px-2 py-0.5 rounded">
                             {prod.brand}
                           </span>
+
                         </button>
                       ))
                     ) : (
@@ -196,6 +206,7 @@ const Navbar = () => {
 
                   </div>
                 )}
+
               </div>
             )}
           </div>
@@ -206,6 +217,7 @@ const Navbar = () => {
             className="relative text-gray-300 hover:text-white p-2 rounded-full hover:bg-white/5"
             aria-label={`Cart, ${cartCount} items`}
           >
+
             <AiOutlineShoppingCart className="w-6 h-6" />
 
             {cartCount > 0 && (
@@ -213,46 +225,79 @@ const Navbar = () => {
                 {cartCount}
               </span>
             )}
+
           </button>
 
           {/* User */}
           <div className="relative">
+
             <button
               onClick={handleUserClick}
               className="text-gray-300 hover:text-white p-2 rounded-full hover:bg-white/5"
-              aria-label={user ? 'User account' : 'Login'}
-              aria-expanded={user ? userDropdown : undefined}
+              aria-label="User account"
+              aria-expanded={userDropdown}
             >
               <AiOutlineUser className="w-6 h-6" />
             </button>
 
             {/* User Dropdown */}
-            {user && userDropdown && (
-              <div className="absolute right-0 top-12 w-48 bg-[#14161f] border border-white/10 rounded-xl shadow-2xl p-2 z-50">
+            {userDropdown && (
+              <div className="absolute right-0 top-12 w-[300px] bg-[#14161f] border border-white/10 rounded-lg shadow-2xl p-4 z-50">
 
-                <div className="px-3 py-2 border-b border-white/5 mb-1">
-                  <p className="text-xs text-gray-400">
-                    Signed in as
-                  </p>
+                {user ? (
+                  <>
+                    <div className="pb-3 border-b border-white/10">
 
-                  <p className="text-sm font-semibold text-white truncate">
-                    {user.name}
-                  </p>
+                      <p className="text-xs text-gray-400">
+                        Signed in as
+                      </p>
 
-                  <p className="text-xs text-gray-400 truncate">
-                    {user.email}
-                  </p>
-                </div>
+                      <p className="text-sm font-semibold text-white truncate mt-1">
+                        {user.name}
+                      </p>
 
-                <button
-                  onClick={handleLogout}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded-lg text-left"
-                >
-                  <FiLogOut className="w-4 h-4" />
-                  Logout
-                </button>
+                      <p className="text-xs text-gray-400 truncate mt-1">
+                        {user.email}
+                      </p>
+
+                    </div>
+
+                    <button
+                      onClick={handleLogout}
+                      className="w-full flex items-center gap-2 mt-3 px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded-lg text-left"
+                    >
+                      <FiLogOut className="w-4 h-4" />
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <h3 className="text-base font-semibold text-gray-200">
+                      Hello!
+                    </h3>
+
+                    <p className="text-sm text-gray-400 mt-1">
+                      Access account and manage orders
+                    </p>
+
+                    <button
+                      onClick={handleAuthClick}
+                      className="mt-4 px-4 py-2 border border-gray-500 text-gray-300 hover:text-white hover:border-white transition-colors text-sm"
+                    >
+                      Login / Signup
+                    </button>
+
+                    <div className="border-t border-white/10 mt-4 pt-4">
+                      <p className="text-sm text-gray-400">
+                        Please Login
+                      </p>
+                    </div>
+                  </>
+                )}
+
               </div>
             )}
+
           </div>
 
         </div>
